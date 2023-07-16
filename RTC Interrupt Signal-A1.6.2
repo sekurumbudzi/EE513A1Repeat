@@ -1,0 +1,74 @@
+/*this will make an LED connected to GPIO 5 flash on alarm condition*
+ *once a century on December 12 at 12:12:12*/
+
+#include"I2CDevice.h"
+#include<linux/i2c.h>
+#include<linux/i2c-dev.h>
+#include <DS3231.h>
+#include <stdio.h>
+#include "leds.h"
+#include <time.h>
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<unistd.h>
+
+#define GPIO_NUMBER “5”
+#define GPIO5_PATH "/sys/class/gpio/gpio5/"
+#define GPIO_SYSFS "/sys/class/gpio/"
+
+void writeGPIO(char filename[], char value[])
+
+{
+
+FILE* fp; 
+fp = fopen(filename, "w+"); 
+fprintf(fp, "%s", value); 
+fclose(fp); 
+
+}
+
+using namespace std;
+int main()
+{
+date_d now=date (0);
+time_t now =time (0);
+
+int h1=tm_hour;                                                        /*For hours*/
+int m1=tm_min;                                                         /*For minutes*/
+int s1=tm_sec;                                                         /*For seconds*/
+int d1=date_year;                                                      /*For year*/
+int d2=date_month;                                                     /*For month*/
+int d3=date_day;                                                       /*For day*/
+
+if h1 =12, m1=12, s1=12, d1 = 12, d2= 12, d3=12;
+
+{
+
+cd /sys/class/gpio
+ls
+echo 5 > export
+ls
+cd gpio5
+ls
+echo out > direction
+echo 1 > value
+cat direction 
+
+writeGPIO(GPIO_SYSFS "export", GPIO_NUMBER);
+usleep(5000000);                                                       /*delay for 5000ms*/
+writeGPIO(GPIO5_PATH "direction", "out");
+
+
+{
+
+else continue;
+writeGPIO(GPIO5_PATH "value", "0");
+
+   }
+
+  }
+
+ }
+return 0;
+}
