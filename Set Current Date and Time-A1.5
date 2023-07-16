@@ -1,0 +1,70 @@
+#include <iostream>
+#include <iomanip>
+#include "I2CDevice.h"
+#include <date>
+#include <time>
+#include <DS3231.h>
+#include<linux/i2c.h>
+#include<linux/i2c-dev.h>
+
+
+// date and time registers
+const int RTC_SECONDS_REG = 0x00;
+const int RTC_MINUTES_REG = 0x01;
+const int RTC_HOURS_REG = 0x02;
+const int RTC_DAY_REG = 0x03;
+const int RTC_DATE_REG = 0x04;
+const int RTC_MONTH_REG = 0x05;
+const int RTC_YEAR_REG = 0x06;
+
+class RTCModule {
+private:
+    I2CDevice rtc;
+
+    // Function to read data from the RTC
+   date_t readRTCRegister(int regAddr) {
+        date_t data;
+        rtc.read(regAddr, &data, 1);
+        return data;
+    }
+
+    // Function to write data to the RTC
+    void writeRTCRegister(int regAddr, date_t data) {
+        rtc.write(regAddr, &data, 1);
+    }
+
+public:
+    RTCModule() : rtc(I2CDevice) {}
+
+    // Function to set the date and time
+    void setDateTime(time_t seconds, time_t minutes, time_t hours,
+                     time_t day, time_t date, time_t month, time_t year) {
+        
+        seconds = ((seconds / 10) << 4) | (seconds % 10);
+        minutes = ((minutes / 10) << 4) | (minutes % 10);
+        hours = ((hours / 10) << 4) | (hours % 10);
+        day = ((day / 10) << 4) | (day % 10);
+        date = ((date / 10) << 4) | (date % 10);
+        month = ((month / 10) << 4) | (month % 10);
+        year = ((year / 10) << 4) | (year % 10);
+
+        // Write the date and time to the RTC registers
+        writeRTCRegister(RTC_SECONDS_REG, seconds);
+        writeRTCRegister(RTC_MINUTES_REG, minutes);
+        writeRTCRegister(RTC_HOURS_REG, hours);
+        writeRTCRegister(RTC_DAY_REG, day);
+        writeRTCRegister(RTC_DATE_REG, date);
+        writeRTCRegister(RTC_MONTH_REG, month);
+        writeRTCRegister(RTC_YEAR_REG, year);
+    }
+
+ 
+int main() {
+    RTCModule rtcModule;
+
+    // Set the desired date and time (in decimal format)
+    // Example: 16th July 2023, 17:55:56
+    rtcModule.setDateTime(56, 34, 12, 2, 16, 7, 23);
+
+  
+    return 0;
