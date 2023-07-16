@@ -1,0 +1,58 @@
+#include <iostream>
+#include <time.h>
+#include <date.h>
+#include <DS3231.h>
+#include "I2CDevice.h" 
+
+using namespace std;
+int main()
+
+// RTC registers
+const int RTC_SECONDS_REG = 0x00;
+const int RTC_MINUTES_REG = 0x01;
+const int RTC_HOURS_REG = 0x02;
+const int RTC_DAY_REG = 0x03;
+const int RTC_DATE_REG = 0x04;
+const int RTC_MONTH_REG = 0x05;
+const int RTC_YEAR_REG = 0x06;
+
+// Function to read data from the RTC
+uint8_t readRTCRegister(I2CDevice& rtc, int regAddr) {
+    uint8_t data;
+    rtc.read(regAddr, &data, 1);
+    return data;
+}
+
+int main() {
+    // Initialize your I2CDevice class
+    I2CDevice rtc(RTC_I2C_ADDRESS);
+
+    // Read date and time from the RTC
+    time_t seconds = readRTCRegister(rtc, RTC_SECONDS_REG);
+    time_t minutes = readRTCRegister(rtc, RTC_MINUTES_REG);
+    time_t hours = readRTCRegister(rtc, RTC_HOURS_REG);
+    date_t day = readRTCRegister(rtc, RTC_DAY_REG);
+    date_t date = readRTCRegister(rtc, RTC_DATE_REG);
+    date_t month = readRTCRegister(rtc, RTC_MONTH_REG);
+    date_t year = readRTCRegister(rtc, RTC_YEAR_REG);
+
+    // Convert BCD to decimal 
+    seconds = ((seconds & 0b11110000) >> 4) * 10 + (seconds & 0b00001111);
+    minutes = ((minutes & 0b11110000) >> 4) * 10 + (minutes & 0b00001111);
+    hours = ((hours & 0b00110000) >> 4) * 10 + (hours & 0b00001111);
+    date = ((date & 0b00110000) >> 4) * 10 + (date & 0b00001111);
+    month = ((month & 0b00010000) >> 4) * 10 + (month & 0b00001111);
+    year = ((year & 0b11110000) >> 4) * 10 + (year & 0b00001111);
+
+    // Display the date and time
+    std::cout << "Current Date and Time:" << std::endl;
+    std::cout << std::setfill('0');
+    std::cout << "20" << std::setw(2) << static_cast<int>(year) << "-";
+    std::cout << std::setw(2) << static_cast<int>(month) << "-";
+    std::cout << std::setw(2) << static_cast<int>(date) << " ";
+    std::cout << std::setw(2) << static_cast<int>(hours) << ":";
+    std::cout << std::setw(2) << static_cast<int>(minutes) << ":";
+    std::cout << std::setw(2) << static_cast<int>(seconds) << std::endl;
+
+    return 0;
+}
