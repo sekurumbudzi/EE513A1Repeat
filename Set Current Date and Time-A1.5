@@ -7,6 +7,8 @@
 #include<linux/i2c.h>
 #include<linux/i2c-dev.h>
 
+using namespace std;
+int main()
 
 // date and time registers
 const int RTC_SECONDS_REG = 0x00;
@@ -22,8 +24,8 @@ private:
     I2CDevice rtc;
 
     // Function to read data from the RTC
-   date_t readRTCRegister(int regAddr) {
-        date_t data;
+   data_t readRTCRegister(int regAddr) {
+        data_t data;
         rtc.read(regAddr, &data, 1);
         return data;
     }
@@ -62,9 +64,10 @@ public:
 int main() {
     RTCModule rtcModule;
 
-    // Set the desired date and time (in decimal format)
-    // Example: 16th July 2023, 17:55:56
+    // Setting the desired date and time
+    // It is currently July 16th 2023 at 17:55:56
     rtcModule.setDateTime(56, 34, 12, 2, 16, 7, 23);
 
   
     return 0;
+}
