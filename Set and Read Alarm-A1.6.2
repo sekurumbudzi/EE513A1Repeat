@@ -1,0 +1,58 @@
+#include"I2CDevice.h"
+#include<linux/i2c.h>
+#include<linux/i2c-dev.h>
+#include <DS3231.h>
+#include <stdio.h>
+#include "leds.h"
+#include <time.h>
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<unistd.h>
+
+#define GPIO_NUMBER “4”
+#define GPIO4_PATH "/sys/class/gpio/gpio4/"
+#define GPIO_SYSFS "/sys/class/gpio/"
+#define AlarmClock_h
+
+// This alarm will set the LED connected to GPIO 4 flashing for the whole of the 16th minute every hour
+
+using namespace std;
+int main()
+
+{
+time_t now =time (0);
+int h1= tm_hour;                                                   //For hours
+int m1=tm_min;                                                     //For minutes
+int s1= tm_sec;                                                    //For seconds
+
+if m1 = 16
+
+{
+
+cd /sys/class/gpio
+ls
+echo 4 > export
+ls
+cd gpoi4
+ls
+echo out > direction
+echo 1 > value
+cat direction 
+
+writeGPIO(GPIO_SYSFS "export", GPIO_NUMBER);
+usleep(100000);                                                       //100ms delay
+writeGPIO(GPIO4_PATH "direction", "out");
+
+{
+
+else continue;
+writeGPIO(GPIO4_PATH "value", "0");
+
+     }
+
+   }
+
+  }
+return 0;
+}
