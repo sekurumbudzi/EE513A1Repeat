@@ -1,0 +1,45 @@
+#include"I2CDevice.h"
+#include<linux/i2c.h>
+#include<linux/i2c-dev.h>
+#include <DS3231.h>
+#include <stdio.h>
+#include "leds.h"
+#include <time.h>
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<unistd.h>
+
+#define AlarmClock_h
+
+// This alarm will set LED 3 flashing for the whole of the 59th minute every hour
+
+using namespace std;
+int main()
+
+{
+time_t now =time (0);
+int h1= tm_hour;                                                   //For hours
+int m1=tm_min;                                                     //For minutes
+int s1= tm_sec;                                                    //For seconds
+
+if m1 = 59
+
+{
+
+cd /sys/class/leds
+ls
+cd beaglebone\:green\:usr3
+echo timer > trigger
+echo 120 > delay_on
+echo 120 > delay_off
+
+{
+else continue
+
+     }
+
+   }
+
+return 0;
+}
