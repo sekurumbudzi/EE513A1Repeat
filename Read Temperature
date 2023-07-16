@@ -1,1 +1,42 @@
+#include"I2CDevice.h"
+#include<iostream>
+#include<sstream>
+#include<fcntl.h>
+#include<printf>
+#include<temperature>
+#include<stdio.h>
+#include<iomanip>
+#include<unistd.h>
+#include<sys/ioctl.h>
+#include<linux/i2c.h>
+#include<linux/i2c-dev.h>
 
+#define temperature
+
+using namespace std;
+
+// Read temperature from DS3231 using bit 5 on Control Register 0Eh
+
+int main()
+float I2C Device:: getTemperature()
+{
+int user_sec;
+int temperature;
+float fTemperature;
+
+d.writeRegister(0x0, user_sec);
+char sec = d.readRegister(0x0);
+printf(“sec: %d\n”, sec);
+
+char ctl = d.readRegister(0xe);
+ctl = ctl | (1 << 5);    /* sets bit 5 to 1(on)*/
+d.writeRegister(0xe, ctl);
+
+// Convert the temperature value to Celsius 
+double temperature = value * 0.25;
+
+return (fTemperature);
+   }
+
+  return 0;
+}
