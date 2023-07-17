@@ -13,12 +13,13 @@ using namespace std;
 
 #define HEX(x) setw(2) << setfill('0') << hex << (int)(x)
 namespace EE513 {
-/**Constructor for the I2CDevice class. 
-*It requires the bus number and device number.   
- * The constructor opens a file handle to the I2C device, which is destroyed when the destructor is called
- * @param bus The bus number.
- * @param device The device ID on the bus.
- */
+
+ // Constructor for the I2CDevice class. 
+ // It requires the bus number and device number.   
+ // The constructor opens a file handle to the I2C device, which is destroyed when the destructor is called.
+ // @param bus The bus number.
+ // @param device The device ID on the bus.
+
 
 I2CDevice::I2CDevice(unsigned int bus, unsigned int device) {
 	this->file=-1;
@@ -27,11 +28,8 @@ I2CDevice::I2CDevice(unsigned int bus, unsigned int device) {
 	this->open();
 }
 
-
-/**
- * Open a connection to an I2C device
- * @return 1 on failure to open to the bus or device, 0 on success.
- */
+ // Open a connection to an I2C device
+ // @return 1 on failure to open to the bus or device, 0 on success.
 
 
 int I2CDevice::open(){
@@ -39,13 +37,9 @@ int I2CDevice::open(){
    if(this->bus==0) name = I2C_0;
    else name = I2C_1;
    else if(this->bus==1) name = I2C_1;        
-   else name = I2C_2;       
-
-
-/** Error found and code fixed and uploaded to Loop by Aminuddin Mohammed. 
-*reference  = https://loop.dcu.ie/mod/forum/discuss.php?d=503899 
-*accessed on 23rd Feb 2023
-*/
+   else name = I2C_2;                       // Error found and code fixed, then uploaded to Loop by Aminuddin Mohammed. 
+                                            // Reference  = https://loop.dcu.ie/mod/forum/discuss.php?d=503899 
+                                            // Accessed on 23rd Feb 2023
 
 
    if((this->file=::open(name.c_str(), O_RDWR)) < 0){
@@ -58,12 +52,12 @@ int I2CDevice::open(){
    }
 return 0;
 }
-/**
- * Write a single byte value to a single register.
- * @param registerAddress The register address
- * @param value The value to be written to the register
- * @return 1 on failure to write, 0 on success.
- */
+
+// Write a single byte value to a single register.
+// @param registerAddress The register address
+// @param value The value to be written to the register
+// @return 1 on failure to write, 0 on success.
+
 
 int I2CDevice::writeRegister(unsigned int registerAddress, unsigned char value){
    unsigned char buffer[2];
@@ -76,12 +70,9 @@ int I2CDevice::writeRegister(unsigned int registerAddress, unsigned char value){
    return 0;
 }
 
-/**
- * Write a single value to the I2C device. Used to set up the device to read from a
- * particular address.
- * @param value the value to write to the device
- * @return 1 on failure to write, 0 on success.
- */
+// Write a single value to the I2C device. Used to set up the device to read from a particular address.
+// @param value the value to write to the device
+// @return 1 on failure to write, 0 on success.
 
 int I2CDevice::write(unsigned char value){
    unsigned char buffer[1];
@@ -93,12 +84,9 @@ int I2CDevice::write(unsigned char value){
    return 0;
 }
 
-
-/**
- * Read a single register value from the address on the device.
- * @param registerAddress the address to read from
- * @return the byte value at the register address.
- */
+// Read a single register value from the address on the device.
+// @param registerAddress the address to read from
+// @return the byte value at the register address.
 
 unsigned char I2CDevice::readRegister(unsigned int registerAddress){
    this->write(registerAddress);
@@ -110,15 +98,11 @@ unsigned char I2CDevice::readRegister(unsigned int registerAddress){
    return buffer[0];
 }
 
-/**
- * Method to read a number of registers from a single device. This is more   
- * efficient than reading each register by itself. 
- *The from address is the starting address to read from, which defaults to 0x00.
- * @param number the number of registers to read from the device
- * @param fromAddress the starting address to read from
- * @return a pointer of type unsigned char that points to the first element in the *block of registers
- */
-
+// Method to read a number of registers from a single device. This is more efficient than reading each register by itself. 
+// The from address is the starting address to read from, which defaults to 0x00.
+// @param number the number of registers to read from the device
+// @param fromAddress the starting address to read from
+// @return a pointer of type unsigned char that points to the first element in the *block of registers
 
 unsigned char* I2CDevice::readRegisters(unsigned int number, unsigned int fromAddress){
 	this->write(fromAddress);
@@ -130,12 +114,12 @@ unsigned char* I2CDevice::readRegisters(unsigned int number, unsigned int fromAd
 	return data;
 }
 
-/**
- * Method to dump the registers to the standard output. It inserts a return 
- * character every 16 values and displays the results in hexadecimal to *give a standard output using the HEX() macro that is defined at the top of this *file. 
- * The standard output will stay in hexadecimal format, hence the call on the last like.
- * @param number the total number of registers to dump, defaults to 0xff
- */
+// Method to dump the registers to the standard output. 
+// It inserts a return character every 16 values and displays the results in hexadecimal
+// This produces a standard output using the HEX() macro that is defined at the top of this file. 
+// The standard output will stay in hexadecimal format, hence the call on the last like.
+// @param number the total number of registers to dump, defaults to 0xff
+
 
 void I2CDevice::debugDumpRegisters(unsigned int number){
 	cout << "Dumping Registers for Debug Purposes:" << endl;
@@ -147,25 +131,20 @@ void I2CDevice::debugDumpRegisters(unsigned int number){
 	cout << dec;
 }
 
-/**
- * Close the file handles and sets a temporary state to -1.
- */
+// Close the file handles and sets a temporary state to -1.
+ 
 
 void I2CDevice::close(){
 	::close(this->file);
 	this->file = -1;
-}
+  }
 
-/**
- * Closes the file on destruction, provided that it has not already been closed.
- */
-
+// Closes the file on destruction, provided that it has not already been closed.
 
 I2CDevice::~I2CDevice() {
 	if(file!=-1) this->close();
-}
+  }
 
 } 
 
 /* namespace EE513*/
-
