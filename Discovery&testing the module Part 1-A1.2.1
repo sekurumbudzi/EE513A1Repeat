@@ -2,18 +2,16 @@
 #define I2C_H_
 #define I2C_0 "/dev/i2c-0"
 #define I2C_1 "/dev/i2c-1"
-#define I2C_2 "/dev/i2c-2"         
+#define I2C_2 "/dev/i2c-2"         // Error found and code fixed, then uploaded to Loop by Aminuddin Mohammed. 
+                                   // Reference = https://loop.dcu.ie/mod/forum/discuss.php?d=503899 
+                                   // Accessed on 23rd Feb 2023
 
-/** Error found and code fixed and uploaded to Loop by Aminuddin Mohammed. 
-*reference = https://loop.dcu.ie/mod/forum/discuss.php?d=503899 
-*accessed on 23rd Feb 2023*/
 
 namespace EE513{
 
-/**
- * @class I2CDevice
- * @brief Generic I2C Device class that can be used to connect to any type of I2C device and read or write to its registers
- */
+// @class I2CDevice
+// @brief Generic I2C Device class that can be used to connect to any type of I2C device and read or write to its registers
+
 
 class I2CDevice{
 private:
@@ -35,6 +33,6 @@ public:
   };
 } 
 
-/* namespace EE513*/
+// namespace EE513
 
-#endif /* I2C_H_ */
+#endif // I2C_H_ 
