@@ -10,7 +10,7 @@
 #include<string>
 #include<unistd.h>
 
-// To print “Have you actually got up after your alarm went off?” and make LED 1 flash 10 times per second
+// To print “Did you actually get out of bed?” and make LED 1 flash 10 times per second
 
 using namespace std;
 int main()
@@ -31,7 +31,7 @@ void setDirection(int gpio, const std::string& direction) {
     directionFile.close();
 }
 
-// Function to set the value (high/low) of a GPIO pin
+
 void setValue(int gpio, int value) {
     std::ofstream valueFile(GPIO_PATH + "gpio" + std::to_string(gpio) + "/value");
     valueFile << value;
@@ -39,15 +39,15 @@ void setValue(int gpio, int value) {
 }
 
 int main() {
-    int ledPin = 60; // GPIO pin P9_12 (check your BeagleBone Black pinout)
+    int ledPin = 60; 
 
-    // Export the GPIO pin and set it as an output
+ 
     exportGPIO(ledPin);
     setDirection(ledPin, "out");
 
-    std::cout << "Have you actually got up after your alarm went off?" << std::endl;
+    std::cout << "Did you actually get out of bed?" << std::endl;
 
-    // Make the LED flash 10 times per second (100ms ON, 100ms OFF)
+    // Make the LED flash 10 times per second 
     for (int i = 0; i < 10; i++) {
         setValue(ledPin, 1); // LED ON
         usleep(50000); // 50ms delay
