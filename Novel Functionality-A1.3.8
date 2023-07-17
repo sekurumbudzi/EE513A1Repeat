@@ -17,20 +17,11 @@ int main()
 
 const std::string GPIO_PATH = "/sys/class/gpio/";
 
-// Function to export a GPIO pin
 void exportGPIO(int gpio) {
     std::ofstream exportFile(GPIO_PATH + "export");
     exportFile << gpio;
     exportFile.close();
 }
-
-// Function to set the direction of a GPIO pin (in/out)
-void setDirection(int gpio, const std::string& direction) {
-    std::ofstream directionFile(GPIO_PATH + "gpio" + std::to_string(gpio) + "/direction");
-    directionFile << direction;
-    directionFile.close();
-}
-
 
 void setValue(int gpio, int value) {
     std::ofstream valueFile(GPIO_PATH + "gpio" + std::to_string(gpio) + "/value");
@@ -39,20 +30,21 @@ void setValue(int gpio, int value) {
 }
 
 int main() {
-    int ledPin = 60; 
+    int ledPin = 50; 
 
- 
     exportGPIO(ledPin);
     setDirection(ledPin, "out");
 
     std::cout << "Did you actually get out of bed?" << std::endl;
 
-    // Make the LED flash 10 times per second 
+    // Make the LED flash 
+
+    
     for (int i = 0; i < 10; i++) {
-        setValue(ledPin, 1); // LED ON
-        usleep(50000); // 50ms delay
-        setValue(ledPin, 0); // LED OFF
-        usleep(50000); // 50ms delay
+        setValue(ledPin, 1);                  // LED ON
+        usleep(50000);                        // 50ms delay
+        setValue(ledPin, 0);                  // LED OFF
+        usleep(50000);                        // 50ms delay
     }
 
 
