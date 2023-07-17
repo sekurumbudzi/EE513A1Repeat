@@ -1,1 +1,50 @@
+make -C /lib/modules/$(bok -r)/build M=$(******) modules
 
+sudo insmod rtc_lkm.ko
+
+ls /lib/modules/4.19.94-ti-r42/kernel/drivers/rtc/*1307*
+/lib/modules/4.19.94-ti-r42kernel/drivers/rtc/rtc-ds1307.ko
+sudo modprobe rtc-ds1307
+lsmod|grep rtc
+sudo sh -c "echo ds1307 0x68 > /sys/class/i2c-adapter/i2c-1/new_device"
+dmesg|tail -1
+ls -l /dev/rtc*
+
+
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/rtc.h>
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Bok");
+MODULE_DESCRIPTION("RTC LKM 1307");
+MODULE_VERSION("0.1");
+
+static int __init rtc_lkm_init(void) {
+    struct rtc_time tm;
+    struct rtc_device *rtc;
+
+    printk(KERN_INFO "RTC LKM: Initializing...\n");
+
+    rtc = rtc_class_open("BBB");
+
+    if (IS_ERR(rtc)) {
+        printk(KERN_ERR "RTC LKM: Failed to open RTC device\n");
+        return PTR_ERR(rtc);
+    }
+
+    rtc_read_time(rtc, &tm);
+
+    printk(KERN_INFO "RTC LKM: Current time: %02d:%02d:%02d\n", tm.tm_hour, tm.tm_min, tm.tm_sec);
+
+    rtc_class_close(rtc);
+
+    return 0;
+}
+
+static void __exit rtc_lkm_exit(void) {
+    printk(KERN_INFO "RTC LKM: Exiting...\n");
+}
+
+module_init(rtc_lkm_init);
+module_exit(rtc_lkm_exit);
