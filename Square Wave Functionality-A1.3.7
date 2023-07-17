@@ -10,11 +10,11 @@
 #include<linux/i2c.h>
 #include<linux/i2c-dev.h>
 
+//Set bits 2,3,4 and 6 on Control Register 0Eh for Square Wave Functionality
+
 using namespace std;
-
-/*Set bits 2,3,4 and 6 on Control Register 0Eh for Square Wave Functionality*/
-
 int main()
+
 {
 int user_sec;
 d.writeRegister(0x0, user_sec);
@@ -22,10 +22,10 @@ char sec = d.readRegister(0x0);
 printf(“sec: %d\n” , sec);
 
 char ctl = d.readRegister(0xe);
-ctl = ctl | (1 << 6);    /* sets bit 6 to 1(on)*/
-ctl = ctl | (1 << 4);    /* sets bit 4 to 1(on)*/
-ctl = ctl | (1 << 3);    /* sets bit 3 to 1(on)*/
-ctl = ctl | (0 << 2);    /* sets bit 2 to 0(off)*/
+ctl = ctl | (1 << 6);    // sets bit 6 to 1(on)*/
+ctl = ctl | (1 << 4);    // sets bit 4 to 1(on)*/
+ctl = ctl | (1 << 3);    // sets bit 3 to 1(on)*/
+ctl = ctl | (0 << 2);    // sets bit 2 to 0(off)*/
 d.writeRegister(0xe, ctl);
 
 return 0;
