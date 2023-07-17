@@ -1,1 +1,60 @@
+#include"I2CDevice.h"
+#include<linux/i2c.h>
+#include<linux/i2c-dev.h>
+#include <DS3231.h>
+#include <stdio.h>
+#include "leds.h"
+#include <time.h>
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<unistd.h>
 
+// To print “Have you actually got up after your alarm went off?” and make LED 1 flash 10 times per second
+
+using namespace std;
+int main()
+
+const std::string GPIO_PATH = "/sys/class/gpio/";
+
+// Function to export a GPIO pin
+void exportGPIO(int gpio) {
+    std::ofstream exportFile(GPIO_PATH + "export");
+    exportFile << gpio;
+    exportFile.close();
+}
+
+// Function to set the direction of a GPIO pin (in/out)
+void setDirection(int gpio, const std::string& direction) {
+    std::ofstream directionFile(GPIO_PATH + "gpio" + std::to_string(gpio) + "/direction");
+    directionFile << direction;
+    directionFile.close();
+}
+
+// Function to set the value (high/low) of a GPIO pin
+void setValue(int gpio, int value) {
+    std::ofstream valueFile(GPIO_PATH + "gpio" + std::to_string(gpio) + "/value");
+    valueFile << value;
+    valueFile.close();
+}
+
+int main() {
+    int ledPin = 60; // GPIO pin P9_12 (check your BeagleBone Black pinout)
+
+    // Export the GPIO pin and set it as an output
+    exportGPIO(ledPin);
+    setDirection(ledPin, "out");
+
+    std::cout << "Have you actually got up after your alarm went off?" << std::endl;
+
+    // Make the LED flash 10 times per second (100ms ON, 100ms OFF)
+    for (int i = 0; i < 10; i++) {
+        setValue(ledPin, 1); // LED ON
+        usleep(50000); // 50ms delay
+        setValue(ledPin, 0); // LED OFF
+        usleep(50000); // 50ms delay
+    }
+
+
+    return 0;
+}
